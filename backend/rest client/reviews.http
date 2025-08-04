@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:3000/api/v1
+@contentType = application/json
+
+@adminToken = 
+
+@userToken = 
+
+@parcelId = 
+@userId = 
+
+@reviewId =
+
+### Create review
+POST {{baseUrl}}/reviews
+Content-Type: {{contentType}}
+Authorization: Bearer {{userToken}}
+
+{
+  "parcelId": "{{parcelId}}",
+  "content": "Great service, fast delivery!",
+  "rating": 5
+}
+
+
+### Get all reviews
+GET {{baseUrl}}/reviews
+Authorization: Bearer {{adminToken}}
+
+### Get review by ID
+GET {{baseUrl}}/reviews/{{reviewId}}
+Authorization: Bearer {{adminToken}}
+
+### Get reviews by user
+GET {{baseUrl}}/reviews/user/{{userId}}
+Authorization: Bearer {{adminToken}}
+
+
+### Delete review
+DELETE {{baseUrl}}/reviews/{{reviewId}}
+Authorization: Bearer {{userToken}}
+
+### Delete review (admin)
+DELETE {{baseUrl}}/reviews/{{reviewId}}
+Authorization: Bearer {{adminToken}}
+
+### Get average rating
+GET {{baseUrl}}/reviews/average-rating
+Authorization: Bearer {{adminToken}}

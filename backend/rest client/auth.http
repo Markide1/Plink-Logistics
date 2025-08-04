@@ -1,0 +1,98 @@
+@baseUrl = http://localhost:3000/api/v1
+
+@contentType = application/json
+
+### Register user
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "yofava6354@kloudis.com",
+  "password": "User@1234",
+  "firstName": "Test",
+  "lastName": "User",
+  "phone": "+254745678901"
+}
+
+### Login as user
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "kvr84pltj1@daouse.com",
+  "password": "Nopass_12"
+}
+
+### Login as created user
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "yofava6354@kloudis.com",
+  "password": "User@1234"
+}
+
+### Login as admin
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "user4@yomail.com",
+  "password": "asasassa"
+}
+
+### Forgot password
+POST {{baseUrl}}/auth/forgot-password
+Content-Type: {{contentType}}
+
+{
+  "email": "yofava6354@kloudis.com"
+}
+
+### Reset password 
+POST {{baseUrl}}/auth/reset-password
+Content-Type: {{contentType}}
+
+{
+  "email": "yofava6354@kloudis.com",
+  "resetToken": "553262",
+  "newPassword": "User@5678"
+}
+
+### Register user (duplicate)
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "yofava6354@kloudis.com",
+  "password": "User@1234",
+  "firstName": "Test",
+  "lastName": "User",
+  "phone": "+254745678901"
+}
+
+### Forgot password (non-existent email)
+POST {{baseUrl}}/auth/forgot-password
+Content-Type: {{contentType}}
+
+{
+  "email": "nouser@example.com"
+}
+
+### Reset password (wrong token)
+POST {{baseUrl}}/auth/reset-password
+Content-Type: {{contentType}}
+
+{
+  "email": "yofava6354@kloudis.com",
+  "resetToken": "wrongtoken",
+  "newPassword": "User@5678"
+}
+
+### Reset password (missing fields)
+POST {{baseUrl}}/auth/reset-password
+Content-Type: {{contentType}}
+
+{
+  "email": "yofava6354@kloudis.com"
+}

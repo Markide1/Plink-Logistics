@@ -1,0 +1,144 @@
+<!-- Contact Page -->
+<div class="bg-gray-50 min-h-screen">
+
+  <!-- Contact Form Section -->
+  <section class="py-16">
+    <div class="w-full max-w-md mx-auto">
+      <div class="bg-white rounded-2xl shadow-xl p-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-blue-500 mb-2">Contact Us</h2>
+          <p class="text-black">Send us a message</p>
+        </div>
+        <form (ngSubmit)="onSubmit()" class="space-y-6">
+          <div class="space-y-2">
+            <label for="name" class="block text-sm font-medium text-blue-500">Full Name</label>
+            <input id="name" type="text" name="name" [(ngModel)]="contactForm.name" required
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              autocomplete="name">
+          </div>
+          <div class="space-y-2">
+            <label for="email" class="block text-sm font-medium text-blue-500">Email</label>
+            <input id="email" type="email" name="email" [(ngModel)]="contactForm.email" required
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              autocomplete="email">
+          </div>
+          <div class="space-y-2">
+            <label for="phone" class="block text-sm font-medium text-blue-500">Phone Number</label>
+            <input id="phone" type="text" name="phone" [(ngModel)]="contactForm.phone"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              autocomplete="tel">
+          </div>
+          <div class="space-y-2">
+            <label for="subject" class="block text-sm font-medium text-blue-500">Subject</label>
+            <select id="subject" name="subject" [(ngModel)]="contactForm.subject"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700">
+              <option value="General Inquiry">General Inquiry</option>
+              <option value="Parcel Issue">Parcel Issue</option>
+              <option value="Feedback">Feedback</option>
+              <option value="Partnership">Partnership</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="space-y-2">
+            <label for="message" class="block text-sm font-medium text-blue-500">Message</label>
+            <textarea id="message" name="message" [(ngModel)]="contactForm.message" required rows="4"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"></textarea>
+          </div>
+          <!-- Success Message -->
+          <div *ngIf="submitMessage" class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-blue-800 text-sm">{{ submitMessage }}</span>
+            </div>
+          </div>
+          <button type="submit" [disabled]="isSubmitting"
+            class="w-full bg-blue-500 text-white py-3 px-4 rounded-full font-medium hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center">
+            <ng-container *ngIf="isSubmitting">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Sending...
+            </ng-container>
+            <ng-container *ngIf="!isSubmitting">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="#e3e3e3">
+                <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z"/>
+              </svg>
+              Send Message
+            </ng-container>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Info & Visit Us -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+
+        <!-- Contact Info Card -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-blue-500 relative">
+        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+            <span class="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">Contact</span>
+          </div>
+          <div class="text-center">
+          <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M4 4h16v16H4z" stroke-linejoin="round" />
+              <path d="M22 6l-10 7L2 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Contact Information</h3>
+          <div class="space-y-5 mb-6">
+            <div class="flex items-center justify-center space-x-3">
+              <span class="material-icons text-2xl text-blue-500">email</span>
+              <span class="text-gray-800 font-semibold">support&#64;plinklogistics.com</span>
+            </div>
+            <div class="flex items-center justify-center space-x-3">
+              <span class="material-icons text-2xl text-blue-500">phone</span>
+              <span class="text-gray-800 font-semibold">+254 712 345 678</span>
+            </div>
+            <div class="flex items-center justify-center space-x-3">
+              <span class="material-icons text-2xl text-blue-500">chat</span>
+              <span class="text-gray-800 font-semibold">+254 712 345 678</span>
+            </div>
+          </div>
+          <div class="pt-6 border-t border-gray-200">
+            <p class="text-sm text-gray-500">Reach out to us for any inquiries or support.</p>
+          </div>
+        </div>
+        </div>
+
+        <!-- Visit Us Card -->
+      <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-blue-500 relative">
+        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+          <span class="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">Visit Us</span>
+        </div>
+        <div class="text-center">
+          <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+              <circle cx="12" cy="9" r="2.5" />
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Our Main Office</h3>
+          <div class="space-y-2 mb-6">
+            <p class="text-gray-700 font-semibold flex items-center justify-center gap-2">
+              <span class="material-icons text-blue-500">location_on</span> Ndagani, Chuka.
+            </p>
+            <p class="text-gray-600 text-base md:text-lg">Monday - Saturday:</p>
+            <p class="text-gray-600">9:00 AM - 6:00 PM</p>
+          </div>
+          <div class="pt-6 border-t border-gray-200">
+            <p class="text-sm text-gray-500">You are welcome to visit us during working hours.</p>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+</div>

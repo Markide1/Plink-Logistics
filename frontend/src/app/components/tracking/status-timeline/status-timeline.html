@@ -1,0 +1,59 @@
+<div class="bg-white rounded-lg shadow-sm border border-blue-100 p-6">
+  <h3 class="text-lg font-semibold text-blue-800 mb-6">Tracking Timeline</h3>
+  <div class="relative">
+    <!-- Timeline line -->
+    <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-blue-100"></div>
+    <!-- Timeline events -->
+    <div class="space-y-6">
+      <div *ngFor="let event of events; let i = index" 
+           class="relative flex items-start space-x-4"
+           [class.opacity-50]="!isEventActive(event)">
+        <!-- Timeline dot -->
+        <div class="relative z-10 flex items-center justify-center w-8 h-8 rounded-full border-2 flex-shrink-0"
+             [class.bg-blue-600]="isEventCurrent(event)"
+             [class.border-blue-600]="isEventCurrent(event)"
+             [class.text-white]="isEventCurrent(event)"
+             [class.bg-blue-100]="isEventActive(event) && !isEventCurrent(event)"
+             [class.border-blue-100]="isEventActive(event) && !isEventCurrent(event)"
+             [class.text-blue-800]="isEventActive(event) && !isEventCurrent(event)"
+             [class.bg-white]="!isEventActive(event)"
+             [class.border-blue-100]="!isEventActive(event)"
+             [class.text-blue-600]="!isEventActive(event)">
+          <!-- Pulse animation for current event -->
+          <div *ngIf="isEventCurrent(event)" class="absolute inset-0 rounded-full bg-blue-600 animate-ping opacity-75"></div>
+          <app-icon [name]="getEventIcon(event.status)" [size]="16" class="relative z-10"></app-icon>
+        </div>
+        <!-- Event content -->
+        <div class="flex-1 min-w-0 pb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex-1">
+              <h4 class="text-sm font-medium text-blue-800">
+                {{ event.description }}
+              </h4>
+              <p class="text-sm text-blue-600 mt-1">
+                {{ event.location }}
+              </p>
+              <p *ngIf="event.details" class="text-xs text-blue-600 mt-1 opacity-70">
+                {{ event.details }}
+              </p>
+            </div>
+            <div class="mt-2 sm:mt-0 sm:ml-4 flex-shrink-0">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    [class.bg-blue-100]="isEventActive(event) && !isEventCurrent(event)"
+                    [class.text-blue-800]="isEventActive(event) && !isEventCurrent(event)"
+                    [class.bg-blue-600]="isEventCurrent(event)"
+                    [class.text-white]="isEventCurrent(event)"
+                    [class.bg-white]="!isEventActive(event)"
+                    [class.text-blue-600]="!isEventActive(event)">
+                {{ getStatusLabel(event.status) }}
+              </span>
+            </div>
+          </div>
+          <div class="mt-2 text-xs text-blue-600 opacity-80">
+            {{ formatDate(event.timestamp) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

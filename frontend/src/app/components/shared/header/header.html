@@ -1,0 +1,133 @@
+<header class="bg-blue-600 shadow-md sticky top-0 z-50 border-b border-blue-200">
+    <div class="container mx-auto px-4">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a routerLink="/"
+                    class="text-2xl font-bold text-white hover:text-blue-200 transition-colors flex items-center">
+                    <mat-icon class="mr-2" style="font-size: 2rem; vertical-align: middle; color: white;">local_shipping</mat-icon>
+                    Plink Logistics
+                </a>
+            </div>
+
+            <!-- Navigation Links - Centered -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a routerLink="/" routerLinkActive="bg-blue-700 font-semibold"
+                    [routerLinkActiveOptions]="{exact: true}"
+                    class="text-white hover:text-blue-200 transition-colors font-medium px-4 py-2 rounded-md hover:bg-blue-500">
+                    Home
+                </a>
+                <a routerLink="/about" routerLinkActive="bg-blue-700 font-semibold"
+                    class="text-white hover:text-blue-200 transition-colors font-medium px-4 py-2 rounded-md hover:bg-blue-500">
+                    About
+                </a>
+                <a routerLink="/track" routerLinkActive="bg-blue-700 font-semibold"
+                    class="text-white hover:text-blue-200 transition-colors font-medium px-4 py-2 rounded-md hover:bg-blue-500">
+                    Track
+                </a>
+                <a routerLink="/contact" routerLinkActive="bg-blue-700 font-semibold"
+                    class="text-white hover:text-blue-200 transition-colors font-medium px-4 py-2 rounded-md hover:bg-blue-500">
+                    Contact
+                </a>
+            
+
+            <!-- Dashboard Link (show if logged in) -->
+            <a *ngIf="isLoggedIn" [routerLink]="dashboardLink"
+                class="hidden md:block text-white hover:text-blue-200 font-medium transition-colors px-4 py-2 rounded-md hover:bg-blue-500">
+                Dashboard
+            </a>
+
+            <!-- profile -->
+            <div class="flex items-center space-x-4" *ngIf="isLoggedIn">
+                <div class="relative">
+                    <button class="p-2 rounded-full hover:bg-blue-500 focus:outline-none flex items-center bg-blue-600 text-white"
+                            (click)="profileDropdownOpen = !profileDropdownOpen">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+                            <path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/>
+                        </svg>
+                        <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+                            <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+                        </svg>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-40 bg-blue-600 rounded shadow-lg z-50 text-white"
+                         *ngIf="profileDropdownOpen">
+                        <a (click)="goToProfile(); profileDropdownOpen = false" class="block px-4 py-2 hover:bg-blue-700">Profile</a>
+                        <button (click)="logout(); profileDropdownOpen = false" class="block w-full text-left px-4 py-2 text-white hover:bg-blue-700">Logout</button>
+                    </div>
+                </div>
+            </div>
+            </nav>
+
+            <div class="flex items-center space-x-6">
+                <!-- Login Button -->
+                <a *ngIf="!isLoggedIn" routerLink="/auth/login"
+                    class="hidden md:block bg-white text-blue-600 px-4 py-2 rounded-full font-semibold hover:bg-blue-50 transition-colors items-center border border-blue-600 justify-center">
+                    <span class="flex items-center justify-center">
+                        <mat-icon class="mr-1 text-blue-600" style="font-size: 1.6rem;">person</mat-icon>
+                        <span class="ml-0.5">Login</span>
+                    </span>
+                </a>
+               
+            
+                <!-- Mobile Menu Button -->
+                <button (click)="toggleMobileMenu()" class="md:hidden text-white hover:text-blue-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div *ngIf="showMobileMenu" class="md:hidden py-4 border-t border-blue-200 bg-blue-600">
+            <div class="flex flex-col space-y-2">
+                <a routerLink="/" routerLinkActive="bg-blue-700"
+                    [routerLinkActiveOptions]="{exact: true}"
+                    class="text-white hover:text-blue-200 hover:bg-blue-500 px-3 py-2 rounded transition-colors">
+                    Home
+                </a>
+                <a routerLink="/about" routerLinkActive="bg-blue-700"
+                    class="text-white hover:text-blue-200 hover:bg-blue-500 px-3 py-2 rounded transition-colors">
+                    About
+                </a>
+                <a routerLink="/track" routerLinkActive="bg-blue-700"
+                    class="text-white hover:text-blue-200 hover:bg-blue-500 px-3 py-2 rounded transition-colors">
+                    Track
+                </a>
+                <a routerLink="/contact" routerLinkActive="bg-blue-700"
+                    class="text-white hover:text-blue-200 hover:bg-blue-500 px-3 py-2 rounded transition-colors">
+                    Contact
+                </a>
+                <hr class="border-blue-200">
+                <a *ngIf="!isLoggedIn" routerLink="/auth/login"
+                    class="bg-white text-blue-600 px-3 py-2 rounded font-semibold hover:bg-blue-50 transition-colors text-center">
+                    Login
+                </a>
+                <a *ngIf="isLoggedIn" [routerLink]="dashboardLink"
+                    class="text-white hover:text-blue-200 px-3 py-2 font-medium transition-colors">
+                    Dashboard
+                </a>
+                <!-- profile -->
+                <div class="flex items-center space-x-4" *ngIf="isLoggedIn">
+                    <div class="relative">
+                        <button class="p-2 rounded-full hover:bg-blue-500 focus:outline-none flex items-center bg-blue-600 text-white"
+                                (click)="profileDropdownOpen = !profileDropdownOpen">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+                                <path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/>
+                            </svg>
+                            <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+                                <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+                            </svg>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-40 bg-blue-600 rounded shadow-lg z-50 text-white"
+                             *ngIf="profileDropdownOpen">
+                            <a (click)="goToProfile(); profileDropdownOpen = false" class="block px-4 py-2 hover:bg-blue-700">Profile</a>
+                            <button (click)="logout(); profileDropdownOpen = false" class="block w-full text-left px-4 py-2 text-white hover:bg-blue-700">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

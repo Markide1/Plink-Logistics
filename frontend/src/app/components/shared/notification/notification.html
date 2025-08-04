@@ -1,0 +1,26 @@
+<div class="fixed top-4 right-4 z-50 space-y-2">
+  <div *ngFor="let notification of notifications" 
+       class="max-w-md p-4 rounded-lg shadow-lg flex items-start space-x-3"
+       [ngClass]="getNotificationClasses(notification.type)">
+    <!-- Icon -->
+    <div class="flex-shrink-0">
+      <svg class="w-5 h-5" [ngClass]="{
+        'text-green-500': notification.type === 'success',
+        'text-red-500': notification.type === 'error',
+        'text-yellow-400': notification.type === 'warning',
+        'text-blue-400': notification.type === 'info'
+      }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path [attr.d]="getNotificationIcon(notification.type)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+      </svg>
+    </div>
+    <!-- Content -->
+    <div class="flex-1">
+      <h4 class="font-medium text-sm">{{ notification.title }}</h4>
+      <p class="text-sm opacity-90 mt-1">{{ notification.message }}</p>
+      <button *ngIf="notification.action" (click)="handleAction(notification)"
+              class="mt-2 text-sm underline text-blue-600 hover:text-blue-800 font-medium">
+        {{ notification.action.label }}
+      </button>
+    </div>
+  </div>
+</div>

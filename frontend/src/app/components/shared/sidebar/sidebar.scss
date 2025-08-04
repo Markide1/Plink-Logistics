@@ -1,0 +1,42 @@
+.sidebar {
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+// Smooth transitions
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Tooltip styling
+.group:hover .opacity-0 {
+  opacity: 1;
+}
+
+// Active link styling
+.router-link-active {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border-right: 4px solid #2563eb;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .sidebar,
+  .fixed {
+    position: fixed !important;
+    z-index: 50 !important;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .sidebar {
+    transform: translateX(-100%);
+    &.w-64 {
+      transform: translateX(0);
+    }
+  }
+}

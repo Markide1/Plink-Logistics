@@ -1,0 +1,243 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  //   output   = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum ParcelStatus {
+  PENDING
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+  RECEIVED
+  CANCELLED
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  MPESA
+  BANK_TRANSFER
+  CARD
+}
+
+model User {
+  id                      String   @id @default(uuid())
+  email                   String   @unique
+  password                String
+  firstName               String
+  lastName                String
+  phone                   String?
+  profileImage            String?
+  address                 String?
+  role                    UserRole @default(USER)
+  emailVerified           Boolean  @default(false)
+  verificationCode        String?
+  verificationCodeExpiry  DateTime?
+
+  // Password reset fields
+  resetToken       String?
+  resetTokenExpiry DateTime?
+
+  // Temporary password fields (for auto-created accounts)
+  tempPassword       String?
+  tempPasswordExpiry DateTime?
+
+  // Soft delete
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  sentParcels     Parcel[]         @relation("SenderParcels")
+  receivedParcels Parcel[]         @relation("ReceiverParcels")
+  parcelRequests  ParcelRequest[]
+  reviews         Review[]
+  contactMessages ContactMessage[]
+
+  @@map("users")
+}
+
+model Parcel {
+  id String @id @default(uuid())
+
+  // Sender and Receiver
+  senderId   String
+  receiverId String
+  sender     User   @relation("SenderParcels", fields: [senderId], references: [id])
+  receiver   User   @relation("ReceiverParcels", fields: [receiverId], references: [id])
+
+  // Parcel Details
+  description String
+  weight      Float
+  price       Float
+  status      ParcelStatus @default(PENDING)
+
+  // Locations
+  pickupLocation       String
+  pickupLatitude       Float?
+  pickupLongitude      Float?
+  destinationLocation  String
+  destinationLatitude  Float?
+  destinationLongitude Float?
+  currentLocation      String? // Current location for tracking
+  currentLatitude      Float? // Current latitude for tracking
+  currentLongitude     Float? // Current longitude for tracking
+
+  // Tracking
+  trackingNumber String @unique @default(uuid())
+
+  // Link to parcel request (if created from request)
+  parcelRequestId String?
+  parcelRequest   ParcelRequest? @relation(fields: [parcelRequestId], references: [id])
+
+  // Relations
+  payment Payment?
+  reviews Review[]
+
+  // Soft delete
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("parcels")
+}
+
+model ParcelRequest {
+  id String @id @default(uuid())
+
+  // Requester (sender)
+  senderId String
+  sender   User   @relation(fields: [senderId], references: [id])
+
+  // Parcel details
+  receiverEmail       String
+  receiverName        String
+  receiverPhone       String?
+  description         String
+  weight              Float
+  pickupLocation      String
+  destinationLocation String
+  requestedPickupDate DateTime?
+  specialInstructions String?
+
+  // Request status
+  status     RequestStatus @default(PENDING)
+  adminNotes String?
+
+  // Created parcels (if approved) - one request can create multiple parcels if needed
+  createdParcels Parcel[]
+
+  // Soft delete
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("parcel_requests")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  parcelId  String
+  parcel    Parcel   @relation(fields: [parcelId], references: [id])
+  content   String
+  rating    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, parcelId]) // One review per user per parcel
+  @@map("reviews")
+}
+
+model Payment {
+  id       String @id @default(uuid())
+  parcelId String @unique
+  parcel   Parcel @relation(fields: [parcelId], references: [id])
+
+  // Payment details
+  amount   Float
+  currency String         @default("KES")
+  status   PaymentStatus  @default(PENDING)
+  method   PaymentMethod?
+
+  // M-Pesa specific fields
+  mpesaTransactionId String?
+  mpesaReceiptNumber String?
+  mpesaPhoneNumber   String?
+
+  // Bank transfer specific fields
+  bankTransactionId String?
+  bankAccountNumber String?
+
+  // Card payment specific fields
+  cardLast4Digits String?
+  cardType        String?
+
+  // External payment provider fields
+  externalTransactionId String?
+  externalPaymentRef    String?
+
+  // Processing details
+  processedAt   DateTime?
+  failureReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("payments")
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  replied   Boolean  @default(false)
+  reply     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Optionally, link to user if logged in
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@map("contact_messages")
+}

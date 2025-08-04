@@ -1,0 +1,211 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4" *ngIf="!isLoggedIn">
+  <div class="w-full max-w-md">
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-blue-500 mb-2">Create Account</h2>
+        <p class="text-sm text-black">Join Plink Logistics for fast and reliable deliveries</p>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="flex gap-4">
+          <div class="flex-1 space-y-2">
+            <label for="firstName" class="block text-sm font-medium text-blue-500">First Name <span class="text-blue-500">*</span></label>
+            <input id="firstName" type="text" formControlName="firstName" required
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="getErrorMessage('firstName')"
+              [class.focus:ring-red-500]="getErrorMessage('firstName')"
+              [class.focus:border-red-500]="getErrorMessage('firstName')"
+              autocomplete="given-name">
+            <div *ngIf="getErrorMessage('firstName')" class="text-red-600 text-sm flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+            clip-rule="evenodd" />
+              </svg>
+              {{ getErrorMessage('firstName') }}
+            </div>
+          </div>
+          <div class="flex-1 space-y-2">
+            <label for="lastName" class="block text-sm font-medium text-blue-500">Last Name <span class="text-blue-500">*</span></label>
+            <input id="lastName" type="text" formControlName="lastName" required
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="getErrorMessage('lastName')"
+              [class.focus:ring-red-500]="getErrorMessage('lastName')"
+              [class.focus:border-red-500]="getErrorMessage('lastName')" 
+              autocomplete="family-name">
+            <div *ngIf="getErrorMessage('lastName')" class="text-red-600 text-sm flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clip-rule="evenodd" />
+              </svg>
+              {{ getErrorMessage('lastName') }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-blue-500">Email Address <span class="text-blue-500">*</span></label>
+          <input id="email" type="email" formControlName="email" required
+            class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+            [class.border-red-500]="getErrorMessage('email')" [class.focus:ring-red-500]="getErrorMessage('email')"
+            [class.focus:border-red-500]="getErrorMessage('email')" 
+            autocomplete="email">
+          <div *ngIf="getErrorMessage('email')" class="text-red-600 text-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+            {{ getErrorMessage('email') }}
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label for="phone" class="block text-sm font-medium text-blue-500">Phone Number <span class="text-blue-500">*</span></label>
+          <input id="phone" type="tel" formControlName="phone" required
+            class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+            [class.border-red-500]="getErrorMessage('phone')" [class.focus:ring-red-500]="getErrorMessage('phone')"
+            [class.focus:border-red-500]="getErrorMessage('phone')" autocomplete="tel">
+          <div *ngIf="getErrorMessage('phone')" class="text-red-600 text-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+            {{ getErrorMessage('phone') }}
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="space-y-2">
+          <label for="password" class="block text-sm font-medium text-blue-500">Password <span class="text-blue-500">*</span></label>
+          <div class="relative">
+            <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required  
+              class="w-full px-4 py-3 pr-12 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="getErrorMessage('password')"
+              [class.focus:ring-red-500]="getErrorMessage('password')"
+              [class.focus:border-red-500]="getErrorMessage('password')" 
+              autocomplete="new-password">
+            <button type="button" (click)="togglePasswordVisibility()"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-500 hover:text-blue-700 transition-colors"
+              tabindex="-1">
+              <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.956 9.956 0 012.442-4.362m3.31-2.362A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.96 9.96 0 01-4.205 5.442M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+              </svg>
+            </button>
+          </div>
+          <div *ngIf="getErrorMessage('password')" class="text-red-600 text-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+            {{ getErrorMessage('password') }}
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="space-y-2">
+          <label for="confirmPassword" class="block text-sm font-medium text-blue-500">Confirm Password <span class="text-blue-500">*</span></label>
+          <div class="relative">
+            <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword"
+              formControlName="confirmPassword" required
+              class="w-full px-4 py-3 pr-12 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="getErrorMessage('confirmPassword')"
+              [class.focus:ring-red-500]="getErrorMessage('confirmPassword')"
+              [class.focus:border-red-500]="getErrorMessage('confirmPassword')"
+              autocomplete="new-password">
+            <button type="button" (click)="toggleConfirmPasswordVisibility()"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-500 hover:text-blue-700 transition-colors"
+              tabindex="-1">
+              <svg *ngIf="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg *ngIf="showConfirmPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.956 9.956 0 012.442-4.362m3.31-2.362A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.96 9.96 0 01-4.205 5.442M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+              </svg>
+            </button>
+          </div>
+          <div *ngIf="getErrorMessage('confirmPassword')" class="text-red-600 text-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+            {{ getErrorMessage('confirmPassword') }}
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="space-y-2">
+          <label for="address" class="block text-sm font-medium text-blue-500">City <span class="text-blue-500">*</span></label>
+          <input id="address" type="text" formControlName="address" required
+            class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+            [class.border-red-500]="getErrorMessage('address')" [class.focus:ring-red-500]="getErrorMessage('address')"
+            [class.focus:border-red-500]="getErrorMessage('address')" 
+            autocomplete="address-line1">
+          <div *ngIf="getErrorMessage('address')" class="text-red-600 text-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+            {{ getErrorMessage('address') }}
+          </div>
+        </div>
+
+        <!-- Success/error messages -->
+        <div class="text-blue-500 text-sm text-center mb-4" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+        <div class="text-red-500 text-sm text-center" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit"
+          class="w-full bg-blue-500 hover:bg-blue-700 text-white py-3 rounded-full font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          [disabled]="!registerForm.valid || isLoading"
+          style="min-width: 200px;">
+          <span class="flex items-center justify-center w-full text-white" style="min-height: 24px;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" height="24px"
+              viewBox="0 -960 960 960" width="24px" fill="white">
+              <path
+          d="M720-400v-120H600v-80h120v-120h80v120h120v80H800v120h-80Zm-360-80q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z" />
+            </svg>
+            <span class="text-white">Create Account</span>
+          </span>
+        </button>
+      </form>
+
+      <!-- Login Link -->
+      <div class="mt-8 pt-6 border-t border-blue-100">
+        <p class="text-center text-sm text-black">
+          Already have an account?
+          <a routerLink="/auth/login" class="text-blue-500 hover:text-blue-800 font-medium ml-1 transition-colors">Sign in
+            here</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

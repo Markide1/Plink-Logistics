@@ -1,0 +1,80 @@
+@baseUrl = http://localhost:3000/api/v1
+@contentType = application/json
+
+@adminToken =
+
+@userToken =
+
+
+@requestId = 
+@parcelId = 
+
+### Create parcel request (valid)
+POST {{baseUrl}}/parcel-requests
+Content-Type: {{contentType}}
+Authorization: Bearer {{userToken}}
+
+{
+  "receiverEmail": "kvr84pltj1@daouse.com",
+  "receiverName": "Kim Receiver",
+  "description": "Requesting delivery of documents",
+  "weight": 2.5,
+  "pickupLocation": "Chuka, Kenya",
+  "destinationLocation": "Nairobi, Kenya",
+  "requestedPickupDate": "2025-07-25T10:00:00.000Z",
+  "specialInstructions": "Handle with care"
+}
+
+
+### Get all parcel requests (admin)
+GET {{baseUrl}}/parcel-requests?page=1&limit=10
+Authorization: Bearer {{adminToken}}
+
+### Get all parcel requests (user)
+GET {{baseUrl}}/parcel-requests?page=1&limit=10
+Authorization: Bearer {{userToken}}
+
+### Get parcel request by ID
+GET {{baseUrl}}/parcel-requests/{{requestId}}
+Authorization: Bearer {{adminToken}}
+
+### Approve parcel request
+PUT {{baseUrl}}/parcel-requests/{{requestId}}/status
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+{
+  "status": "APPROVED",
+  "adminNotes": "Approved now"
+}
+
+### Reject parcel request
+PUT {{baseUrl}}/parcel-requests/{{requestId}}/status
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+{
+  "status": "REJECTED",
+  "adminNotes": "Insufficient details"
+}
+
+### Create parcel from request (admin)
+POST {{baseUrl}}/parcel-requests/{{requestId}}/send
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+{
+  "receiverEmail": "kvr84pltj1@daouse.com",
+  "description": "Documents from request",
+  "weight": 2.5,
+  "pickupLocation": "Chuka, Kenya",
+  "destinationLocation": "Nairobi, Kenya"
+}
+
+### Delete parcel request (user)
+DELETE {{baseUrl}}/parcel-requests/{{requestId}}
+Authorization: Bearer {{userToken}}
+
+### Delete parcel request (admin)
+DELETE {{baseUrl}}/parcel-requests/{{requestId}}
+Authorization: Bearer {{adminToken}}

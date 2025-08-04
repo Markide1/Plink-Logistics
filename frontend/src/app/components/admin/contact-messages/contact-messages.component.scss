@@ -1,0 +1,48 @@
+h2 {
+  letter-spacing: -1px;
+}
+
+.bg-blue-100 {
+  background-color: #ebf8ff;
+}
+
+.bg-blue-50 {
+  background-color: #f0f6ff;
+}
+
+.bg-blue-500 {
+  background-color: #3b82f6;
+}
+
+.text-blue-500 {
+  color: #3b82f6;
+}
+
+.text-blue-600 {
+  color: #2563eb;
+}
+
+.text-blue-700 {
+  color: #1d4ed8;
+}
+
+.rounded-xl {
+  border-radius: 1rem;
+}
+
+.shadow {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  transition: background 0.2s;
+}
+
+textarea {
+  resize: vertical;
+}

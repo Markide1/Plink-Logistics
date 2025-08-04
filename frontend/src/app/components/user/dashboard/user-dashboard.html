@@ -1,0 +1,67 @@
+<div class="bg-gray-50 min-h-screen">
+  <div class="flex-1 flex flex-col">
+    <main class="p-6 lg:p-10 overflow-auto">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-blue-700 mb-8 text-center sm:text-left">Welcome, {{ user.firstName }}</h2>
+
+        <div class="max-w-4xl mx-auto">
+          <div class="bg-white rounded-2xl shadow-lg p-6 lg:p-8 mb-8 text-center">
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+              Track your parcels, send new items, and manage your delivery preferences with ease.
+            </p>
+            <div class="flex items-center justify-center gap-2">
+              <svg class="w-6 h-6 text-blue-500 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" />
+              </svg>
+              <span class="text-blue-600 font-semibold text-base">Live Updates Active</span>
+            </div>
+          </div>
+
+          <div class="mt-12">
+      <div class="bg-white rounded-2xl shadow-lg p-8 md:p-12 flex flex-col items-start w-full">
+        <h3 class="flex items-center text-2xl lg:text-3xl font-bold text-blue-700 mb-8">
+          <span class="mr-3 p-2 bg-blue-100 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#2563eb">
+              <path d="M440-120v-320H120v-80h320v-320h80v320h320v80H520v320h-80Z" />
+            </svg>
+          </span>
+          Quick Actions
+        </h3>
+        <div class="flex flex-row gap-6 w-full">
+          <a [routerLink]="['/dashboard/user/track']"
+            class="flex-1 bg-blue-500 text-white rounded-full px-8 py-4 text-lg font-semibold shadow-lg hover:bg-blue-600 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+            <span class="mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                fill="currentColor">
+                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+              </svg>
+            </span>
+            Track Parcel
+          </a>
+          <a [routerLink]="['/dashboard/user/reviews']"
+            class="flex-1 bg-gray-200 text-blue-600 rounded-full px-8 py-4 text-lg font-semibold shadow-lg hover:bg-gray-400 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+            <span class="mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+              </svg>
+            </span>
+            Reviews
+          </a>
+          <a [routerLink]="['/dashboard/user/profile']"
+            class="flex-1 bg-gray-400 text-white rounded-full px-8 py-4 text-lg font-semibold shadow-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+            <span class="mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
+                <path d="M3 3v18h18V3H3zm16 16H5V5h14v14zm-2-2H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+              </svg>
+            </span>
+            Profile
+          </a>
+        </div>
+        
+      </div>
+    </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

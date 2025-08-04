@@ -1,0 +1,93 @@
+<div class="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-8">
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold text-blue-700 mb-2">Submit a Parcel</h2>
+    <p class="text-gray-600">Fill in the details to send your package.</p>
+  </div>
+  <form [formGroup]="parcelForm" (ngSubmit)="submitParcel()" class="space-y-6">
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+      <input type="text" formControlName="description"
+        class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-sm"
+        placeholder="e.g., Important Documents, Electronics" />
+      <div *ngIf="parcelForm.get('description')?.invalid && parcelForm.get('description')?.touched" class="text-red-600 text-xs mt-1">Description is required.</div>
+      <div *ngIf="parcelForm.get('description')?.invalid && parcelForm.get('description')?.touched" class="text-red-600 text-xs mt-1">
+        Description is required and must be at least 5 characters.
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Weight (kg)</label>
+      <input type="number" formControlName="weight"
+        class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-sm"
+        placeholder="Enter weight in kilograms" />
+      <div *ngIf="parcelForm.get('weight')?.invalid && parcelForm.get('weight')?.touched" class="text-red-600 text-xs mt-1">Weight is required and must be at least 0.1kg.</div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Receiver Name</label>
+      <input type="text" formControlName="receiverName"
+        class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-sm"
+        placeholder="Recipient's Full Name" />
+      <div *ngIf="parcelForm.get('receiverName')?.invalid && parcelForm.get('receiverName')?.touched" class="text-red-600 text-xs mt-1">Receiver name is required.</div>
+      <div *ngIf="parcelForm.get('receiverName')?.invalid && parcelForm.get('receiverName')?.touched" class="text-red-600 text-xs mt-1">
+        Receiver name is required and must be at least 2 characters.
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Receiver Email</label>
+      <input type="email" formControlName="receiverEmail"
+        class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-sm"
+        placeholder="recipient@example.com" />
+      <div *ngIf="parcelForm.get('receiverEmail')?.invalid && parcelForm.get('receiverEmail')?.touched" class="text-red-600 text-xs mt-1">Valid email is required.</div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Receiver Phone</label>
+      <input type="text" formControlName="receiverPhone"
+        class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-sm"
+        placeholder="e.g., +254712345678" />
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Pickup Location</label>
+      <input type="text" formControlName="pickupLocation"
+        class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-sm"
+        placeholder="Your current location or pickup point" />
+      <div *ngIf="parcelForm.get('pickupLocation')?.invalid && parcelForm.get('pickupLocation')?.touched" class="text-red-600 text-xs mt-1">Pickup location is required.</div>
+      <div *ngIf="parcelForm.get('pickupLocation')?.invalid && parcelForm.get('pickupLocation')?.touched" class="text-red-600 text-xs mt-1">
+        Pickup location is required and must be at least 3 characters.
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Destination Location</label>
+      <input type="text" formControlName="destinationLocation"
+        class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-sm"
+        placeholder="Destination location (min 3 characters)" />
+      <div *ngIf="parcelForm.get('destinationLocation')?.invalid && parcelForm.get('destinationLocation')?.touched" class="text-red-600 text-xs mt-1">Destination location is required and must be at least 3 characters.</div>
+      <div *ngIf="parcelForm.get('destinationLocation')?.invalid && parcelForm.get('destinationLocation')?.touched" class="text-red-600 text-xs mt-1">
+        Destination location is required and must be at least 3 characters.
+      </div>
+    </div>
+    <button type="submit" [disabled]="isLoading || parcelForm.invalid"
+      class="bg-blue-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-600 transition-all duration-300 shadow-lg w-full disabled:opacity-50 disabled:cursor-not-allowed">
+      <span *ngIf="!isLoading">Submit Parcel</span>
+      <span *ngIf="isLoading">Submitting...</span>
+    </button>
+  </form>
+  <div *ngIf="success" class="mt-6 bg-green-50 border-l-4 border-green-400 p-4 rounded-lg text-green-800 font-medium">
+    <div class="flex items-center">
+      <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      Parcel request submitted successfully!
+    </div>
+    <div class="mt-2 text-sm">
+      Request ID: <strong>{{ sentParcel?.id }}</strong> <br />
+      Current Status: <strong>{{ sentParcel?.status }}</strong>
+    </div>
+  </div>
+  <div *ngIf="error" class="mt-6 bg-red-50 border-l-4 border-red-400 p-4 rounded-lg text-red-800 font-medium">
+    <div class="flex items-center">
+      <svg class="h-6 w-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+      Error submitting parcel: {{ error }}
+    </div>
+  </div>
+</div>

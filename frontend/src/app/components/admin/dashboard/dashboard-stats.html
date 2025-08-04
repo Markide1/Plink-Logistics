@@ -1,0 +1,111 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+  <div
+    class="bg-white p-8 rounded-2xl shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+    (click)="onStatClick('parcels')">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">Total Parcels</h3>
+        <p *ngIf="!isLoading" class="text-4xl font-bold text-blue-500">{{ stats.totalParcels }}</p>
+        <div *ngIf="isLoading" class="h-10 bg-blue-100 rounded animate-pulse w-24"></div>
+      </div>
+      <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center shadow-md">
+        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 16V6a1 1 0 011-1h13a1 1 0 011 1v10M3 16h16M3 16v2a1 1 0 001 1h1a1 1 0 001-1v-2m10 2a2 2 0 104 0 2 2 0 00-4 0zm-9 0a2 2 0 104 0 2 2 0 00-4 0zM16 10h2l3 3v3h-5v-6z" />
+        </svg>
+      </div>
+    </div>
+    <div class="mt-6 pt-4 border-t border-gray-200">
+      <span class="text-sm text-gray-500">All time parcels</span>
+    </div>
+  </div>
+
+  <div
+    class="bg-white p-8 rounded-2xl shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+    (click)="onStatClick('parcels')">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">Pending Parcels</h3>
+        <p *ngIf="!isLoading" class="text-4xl font-bold text-blue-500">{{ stats.pendingParcels }}</p>
+        <div *ngIf="isLoading" class="h-10 bg-blue-100 rounded animate-pulse w-24"></div>
+      </div>
+      <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center shadow-md">
+        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+        </svg>
+      </div>
+    </div>
+    <div class="mt-6 pt-4 border-t border-gray-200">
+      <span class="text-sm text-gray-500">Uncollected</span>
+    </div>
+  </div>
+
+  <div
+    class="bg-white p-8 rounded-2xl shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+    (click)="onStatClick('activedelivery')">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">Active Deliveries</h3>
+        <p *ngIf="!isLoading" class="text-4xl font-bold text-blue-500">{{ stats.activeDelivery }}</p>
+        <div *ngIf="isLoading" class="h-10 bg-blue-100 rounded animate-pulse w-24"></div>
+      </div>
+      <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center shadow-md">
+        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+    </div>
+    <div class="mt-6 pt-4 border-t border-gray-200">
+      <span class="text-sm text-gray-500">Currently in transit</span>
+    </div>
+  </div>
+
+  <div
+    class="bg-white p-8 rounded-2xl shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+    (click)="onStatClick('revenue')">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+          Total Revenue
+        </h3>
+        <p *ngIf="!isLoading" class="text-4xl font-bold text-blue-500">{{ formatRevenue(stats.totalRevenue) }}</p>
+        <div *ngIf="isLoading" class="h-10 bg-blue-100 rounded animate-pulse w-24"></div>
+      </div>
+      <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center shadow-md">
+        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="mt-6 pt-4 border-t border-gray-200">
+      <span class="text-sm text-gray-500">This month</span>
+    </div>
+  </div>
+
+  <div
+    class="bg-white p-8 rounded-2xl shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+    (click)="onStatClick('users')">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+          Total users
+        </h3>
+        <p *ngIf="!isLoading" class="text-4xl font-bold text-blue-500">{{ stats.users }}</p>
+        <div *ngIf="isLoading" class="h-10 bg-blue-100 rounded animate-pulse w-24"></div>
+      </div>
+      <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" class="text-blue-500">x
+          <path
+            d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z" />
+        </svg>
+      </div>
+    </div>
+    <div class="mt-6 pt-4 border-t border-gray-200">
+      <span class="text-sm text-gray-500">All users</span>
+    </div>
+  </div>
+</div>

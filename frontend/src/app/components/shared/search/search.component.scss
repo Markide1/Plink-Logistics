@@ -1,0 +1,33 @@
+.search-container {
+  @apply relative;
+}
+
+.search-icon {
+  @apply absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none;
+
+  svg {
+    @apply h-4 w-4 text-gray-400;
+  }
+}
+
+.search-input {
+  @apply block w-full border border-gray-300 rounded-md px-3 py-2 text-sm transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+
+  &.with-icon {
+    @apply pl-10;
+  }
+
+  &.with-clear {
+    @apply pr-10;
+  }
+}
+
+.clear-button {
+  @apply absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 transition-colors;
+  @apply hover:text-gray-600 focus:outline-none;
+
+  svg {
+    @apply h-4 w-4;
+  }
+}

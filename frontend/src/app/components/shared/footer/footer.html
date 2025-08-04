@@ -1,0 +1,72 @@
+<footer class="bg-blue-600 text-white py-8 mt-auto" *ngIf="showFooter">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Logo -->
+            <div>
+                <div class="flex items-center">
+                    <a routerLink="/"
+                        class="text-2xl font-bold text-white hover:text-blue-200 transition-colors flex items-center">
+                        <mat-icon class="mr-2"
+                            style="font-size: 2rem; vertical-align: middle; color: white;">local_shipping</mat-icon>
+                        Plink Logistics
+                    </a>
+                </div>
+                <p class="text-gray-300">Your trusted partner for reliable shipping and logistics solutions.</p>
+            </div>
+
+            <!-- Navigation Links -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                <nav class="flex flex-col space-y-2">
+
+                    <a routerLink="/about" routerLinkActive="bg-blue-700 font-semibold"
+                        class="text-white hover:text-blue-200 transition-colors font-medium px-4 py-2 rounded-md hover:bg-blue-500">
+                        About
+                    </a>
+                    <a routerLink="/track" routerLinkActive="bg-blue-700 font-semibold"
+                        class="text-white hover:text-blue-200 transition-colors font-medium px-4 py-2 rounded-md hover:bg-blue-500">
+                        Track
+                    </a>
+                    <a routerLink="/contact" routerLinkActive="bg-blue-700 font-semibold"
+                        class="text-white hover:text-blue-200 transition-colors font-medium px-4 py-2 rounded-md hover:bg-blue-500">
+                        Contact
+                    </a>
+                    <a *ngIf="!isLoggedIn" routerLink="/auth/login" routerLinkActive="bg-blue-700 font-semibold"
+                        class="text-white hover:text-blue-200 transition-colors font-medium px-4 py-2 rounded-md hover:bg-blue-500">
+                        Login
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Contact Info -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+                <div class="flex flex-col space-y-2 text-white">
+                    <div class="flex items-center">
+                        <mat-icon class="mr-2" style="font-size: 1.2rem;">phone</mat-icon>
+                        <span>+254 712 345 678</span>
+                    </div>
+                    <div class="flex items-center">
+                        <mat-icon class="mr-2" style="font-size: 1.2rem;">email</mat-icon>
+                        <span>info&#64;plinklogistics.com</span>
+                    </div>
+                    <div class="flex items-center">
+                        <mat-icon class="mr-2" style="font-size: 1.2rem;">location_on</mat-icon>
+                        <span>Ndagani, Chuka</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="border-t border-white mt-8 pt-6 text-center">
+            <span class="flex items-center justify-center space-x-2">
+                <span>© {{ currentYear }}</span>
+                <span class="flex items-center space-x-1">
+                    <mat-icon style="font-size: 1.2rem;">local_shipping</mat-icon>
+                    <span>Plink Logistics. All rights reserved.</span>
+                </span>
+            </span>
+        </div>
+    </div>
+</footer>

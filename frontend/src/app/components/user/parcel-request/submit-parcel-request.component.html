@@ -1,0 +1,66 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-blue-500 mb-2">Parcel Request</h1>
+        <p class="text-black">Submit a new parcel request</p>
+      </div>
+
+      <form [formGroup]="requestForm" (ngSubmit)="submitRequest()" class="space-y-6">
+        <div *ngIf="error" class="bg-red-100 text-red-700 p-2 rounded">{{ error }}</div>
+        <div *ngIf="success" class="bg-green-100 text-green-700 p-2 rounded">{{ success }}</div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-blue-500 mb-1">Receiver Email</label>
+            <input formControlName="receiverEmail" type="email"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="requestForm.get('receiverEmail')?.invalid && requestForm.get('receiverEmail')?.touched">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-blue-500 mb-1">Receiver Name</label>
+            <input formControlName="receiverName" type="text"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="requestForm.get('receiverName')?.invalid && requestForm.get('receiverName')?.touched">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-blue-500 mb-1">Receiver Phone</label>
+            <input formControlName="receiverPhone" type="text"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-blue-500 mb-1">Weight (kg)</label>
+            <input formControlName="weight" type="number" min="0.1" step="0.01"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="requestForm.get('weight')?.invalid && requestForm.get('weight')?.touched">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-blue-500 mb-1">Description</label>
+            <textarea formControlName="description" rows="2"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="requestForm.get('description')?.invalid && requestForm.get('description')?.touched"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-blue-500 mb-1">Pickup Location</label>
+            <input formControlName="pickupLocation" type="text"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="requestForm.get('pickupLocation')?.invalid && requestForm.get('pickupLocation')?.touched">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-blue-500 mb-1">Destination Location</label>
+            <input formControlName="destinationLocation" type="text"
+              class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="requestForm.get('destinationLocation')?.invalid && requestForm.get('destinationLocation')?.touched">
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="loading"
+          class="w-full bg-blue-500 text-white py-3 px-4 rounded-full font-medium hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center">
+          <span *ngIf="loading" class="animate-spin mr-2">⏳</span>
+          Submit Request
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+:host {
+  display: block;
+}
+
+.bg-gray-50 {
+  background-color: #f9fafb;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+.shadow-xl {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.text-blue-500 {
+  color: #3b82f6;
+}
+
+.text-black {
+  color: #111827;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.p-8 {
+  padding: 2rem;
+}
+
+.max-w-md {
+  max-width: 28rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}

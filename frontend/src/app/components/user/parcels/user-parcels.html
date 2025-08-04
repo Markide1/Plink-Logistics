@@ -1,0 +1,191 @@
+<div class="bg-gray-50 min-h-screen py-10">
+  <div class="container mx-auto px-4">
+    <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
+      <nav class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex space-x-6">
+          <button (click)="setTab('sent')"
+            [class.border-blue-500]="activeTab === 'sent'"
+            [class.text-blue-500]="activeTab === 'sent'"
+            class="py-3 px-6 text-lg font-semibold text-gray-600 border-b-4 border-transparent hover:border-blue-400 hover:text-blue-400 transition-colors duration-300 focus:outline-none">
+            Sent Parcels (<span class="font-bold">{{ sentParcels.totalCount }}</span>)
+          </button>
+          <button (click)="setTab('received')"
+            [class.border-blue-500]="activeTab === 'received'"
+            [class.text-blue-500]="activeTab === 'received'"
+            class="py-3 px-6 text-lg font-semibold text-gray-600 border-b-4 border-transparent hover:border-blue-400 hover:text-blue-400 transition-colors duration-300 focus:outline-none">
+            Received Parcels (<span class="font-bold">{{ receivedParcels.totalCount }}</span>)
+          </button>
+        </div>
+        <button (click)="openSubmitParcelModal()"
+          class="bg-blue-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-600 transition-all duration-300 shadow-lg flex items-center gap-2 transform hover:scale-105">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          Submit Parcel
+        </button>
+      </nav>
+  <div *ngIf="showSubmitParcelModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-xl w-full p-8 relative">
+      <button (click)="closeSubmitParcelModal()"
+        class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold">
+        &times;
+      </button>
+      <app-send-parcel (parcelSent)="onParcelSubmit()"></app-send-parcel>
+    </div>
+  </div>
+    </div>
+
+    <div *ngIf="activeTab === 'sent' && !isLoading" class="mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let parcel of sentParcels.data" class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+          <div class="absolute top-4 right-4">
+            <span [class]="getStatusBadgeClass(parcel.status)" class="px-3 py-1 rounded-full text-xs font-semibold">
+              {{ getStatusText(parcel.status) }}
+            </span>
+          </div>
+          <div class="mb-2 font-bold text-gray-900 text-lg">
+            {{ parcel.description }}
+          </div>
+          <div class="text-sm text-gray-600 mb-4">
+            Tracking ID: <span class="font-semibold text-blue-600">{{ parcel.trackingNumber }}</span>
+          </div>
+          <div class="space-y-2 text-gray-700 text-sm">
+            <p><span class="font-medium">From:</span> {{ getSenderName(parcel) }} ({{ parcel.sender.email || 'N/A' }})</p>
+            <p><span class="font-medium">To:</span> {{ getReceiverName(parcel) }} ({{ parcel.receiver.email || 'N/A' }})</p>
+            <p><span class="font-medium">Weight:</span> {{ parcel.weight }}kg</p>
+            <p><span class="font-medium">Price:</span> KES {{ parcel.price | number:'1.2-2' }}</p>
+            <p><span class="font-medium">Pickup Address:</span> {{ parcel.pickupLocation || 'N/A' }}</p>
+            <p><span class="font-medium">Delivery Address:</span> {{ parcel.destinationLocation || 'N/A' }}</p>
+            <p *ngIf="parcel.currentLocation"><span class="font-medium">Current Location:</span> {{ parcel.currentLocation }}</p>
+            <p><span class="font-medium">Created At:</span> {{ formatDate(parcel.createdAt) }}</p>
+            <p><span class="font-medium">Updated At:</span> {{ formatDate(parcel.updatedAt) }}</p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+            <span class="text-xs text-gray-500">Sent on: {{ formatDate(parcel.createdAt) }}</span>
+            <button (click)="openDetailsModal(parcel)" class="text-blue-600 underline">Details</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="sentLoaded && sentParcels.data.length === 0"
+        class="text-gray-600 py-16 text-center text-lg bg-white rounded-2xl shadow-lg mt-6">
+        <p>You haven't sent any parcels yet.</p>
+        <p class="mt-2">Click "Submit Parcel" to get started!</p>
+      </div>
+      <div *ngIf="sentParcels.totalPages > 1" class="mt-10 flex justify-center">
+        <nav class="flex items-center space-x-3">
+          <button (click)="previousPage('sent')" [disabled]="!sentParcels.hasPrevious"
+            class="px-5 py-2 rounded-full border border-blue-300 text-blue-600 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+            Previous
+          </button>
+          <span class="px-4 py-2 text-md font-semibold text-blue-800 bg-blue-100 rounded-full">
+            Page {{ sentParcels.currentPage }} of {{ sentParcels.totalPages }}
+          </span>
+          <button (click)="nextPage('sent')" [disabled]="!sentParcels.hasNext"
+            class="px-5 py-2 rounded-full border border-blue-300 text-blue-600 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+            Next
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'received' && !isLoading" class="mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let parcel of receivedParcels.data" class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+          <div class="absolute top-4 right-4">
+            <span [class]="getStatusBadgeClass(parcel.status)" class="px-3 py-1 rounded-full text-xs font-semibold">
+              {{ getStatusText(parcel.status) }}
+            </span>
+          </div>
+          <div class="mb-2 font-bold text-gray-900 text-lg">
+            {{ parcel.description }}
+          </div>
+          <div class="text-sm text-gray-600 mb-4">
+            Tracking ID: <span class="font-semibold text-blue-600">{{ parcel.trackingNumber }}</span>
+          </div>
+          <div class="space-y-2 text-gray-700 text-sm">
+            <p><span class="font-medium">From:</span> {{ getSenderName(parcel) }} ({{ parcel.sender.email || 'N/A' }})</p>
+            <p *ngIf="parcel.courier"><span class="font-medium">Courier:</span> {{ getCourierName(parcel) }} ({{ parcel.courier.email }})</p>
+            <p><span class="font-medium">Delivery:</span> {{ parcel.destinationLocation || 'N/A' }}</p>
+            <p><span class="font-medium">Weight:</span> {{ parcel.weight }}kg</p>
+            <p><span class="font-medium">Price:</span> KES {{ parcel.price | number:'1.2-2' }}</p>
+            <p><span class="font-medium">Created At:</span> {{ formatDate(parcel.createdAt) }}</p>
+            <p><span class="font-medium">Updated At:</span> {{ formatDate(parcel.updatedAt) }}</p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+            <div class="flex gap-2">
+              
+            <button (click)="openDetailsModal(parcel)" class="text-blue-600 underline">Details</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="receivedLoaded && receivedParcels.data.length === 0"
+        class="text-gray-600 py-16 text-center text-lg bg-white rounded-2xl shadow-lg mt-6">
+        <p>
+          No parcels have been received by you yet.
+        </p>
+      </div>
+      <div *ngIf="receivedParcels.totalPages > 1" class="mt-10 flex justify-center">
+        <nav class="flex items-center space-x-3">
+          <button (click)="previousPage('received')" [disabled]="!receivedParcels.hasPrevious"
+            class="px-5 py-2 rounded-full border border-blue-300 text-blue-600 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+            Previous
+          </button>
+          <span class="px-4 py-2 text-md font-semibold text-blue-800 bg-blue-100 rounded-full">
+            Page {{ receivedParcels.currentPage }} of {{ receivedParcels.totalPages }}
+          </span>
+          <button (click)="nextPage('received')" [disabled]="!receivedParcels.hasNext"
+            class="px-5 py-2 rounded-full border border-blue-300 text-blue-600 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+            Next
+          </button>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showSubmitParcelModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-xl w-full p-8 relative">
+      <button (click)="closeSubmitParcelModal()"
+        class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold">
+        &times;
+      </button>
+      <app-send-parcel (parcelSent)="onParcelSubmit()"></app-send-parcel>
+    </div>
+  </div>
+
+  <div *ngIf="showDetailsModal" class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Blurred dark background overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm pointer-events-auto"></div>
+    <div class="bg-white rounded-2xl shadow-xl max-w-xl w-full p-8 relative z-10">
+      <button (click)="closeDetailsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold">&times;</button>
+      <h2 class="text-2xl font-bold text-blue-700 mb-4">Parcel Details</h2>
+      <div class="space-y-2 text-gray-700" *ngIf="selectedParcel as parcel">
+        <div><span class="font-medium">Tracking Number:</span> {{ parcel.trackingNumber }}</div>
+        <div><span class="font-medium">Description:</span> {{ parcel.description }}</div>
+        <div><span class="font-medium">Status:</span> <span [class]="getStatusBadgeClass(parcel.status)" class="px-2 py-1 rounded text-xs">{{ getStatusText(parcel.status) }}</span></div>
+        <div><span class="font-medium">Weight:</span> {{ parcel.weight }}kg</div>
+        <div><span class="font-medium">Price:</span> KES {{ parcel.price | number:'1.2-2' }}</div>
+        <div><span class="font-medium">Pickup Address:</span> {{ parcel.pickupLocation || 'N/A' }}</div>
+        <div><span class="font-medium">Delivery Address:</span> {{ parcel.destinationLocation || 'N/A' }}</div>
+        <div><span class="font-medium">Sender:</span> {{ getSenderName(parcel) }} ({{ parcel.sender.email || 'N/A' }})</div>
+        <div><span class="font-medium">Receiver:</span> {{ getReceiverName(parcel) }} ({{ parcel.receiver.email || 'N/A' }})</div>
+        <div *ngIf="parcel.courier"><span class="font-medium">Courier:</span> {{ getCourierName(parcel) }} ({{ parcel.courier.email }})</div>
+        <div><span class="font-medium">Created At:</span> {{ formatDate(parcel.createdAt) }}</div>
+        <div><span class="font-medium">Updated At:</span> {{ formatDate(parcel.updatedAt) }}</div>
+        <div *ngIf="$any(parcel).reviews && isArray($any(parcel).reviews) && $any(parcel).reviews.length > 0">
+          <span class="font-medium">Reviews:</span>
+          <ul class="list-disc ml-6">
+            <li *ngFor="let review of $any(parcel).reviews; trackBy: trackReview">
+              <span class="font-semibold">{{ getReviewUserName(review) }}:</span> <span class="text-yellow-500">{{ review.rating }}★</span> <span *ngIf="review.comment">- {{ review.comment }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-6 flex gap-4" *ngIf="selectedParcel as parcel">
+        <button *ngIf="parcel.status === 'DELIVERED' && user && parcel.receiver && user.id === parcel.receiver.id" (click)="markAsReceived(parcel.id)" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Mark as Received</button>
+        <button (click)="closeDetailsModal()" class="border border-gray-400 px-4 py-2 rounded-full font-semibold">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

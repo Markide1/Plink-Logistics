@@ -1,0 +1,70 @@
+@baseUrl = http://localhost:3000/api/v1
+@contentType = application/json
+
+@adminToken =
+@userToken = 
+
+@userId = 
+
+### Get all users (admin only)
+GET {{baseUrl}}/users?page=1&limit=10
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+
+### Get user by ID
+GET {{baseUrl}}/users/{{userId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+### Change password
+PUT {{baseUrl}}/users/change-password/{{userId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+
+{
+  "newPassword": "Nopass_12"
+}
+
+### Delete user
+DELETE {{baseUrl}}/users/{{userId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+
+### Get user parcels
+GET {{baseUrl}}/users/{{userId}}/parcels?type=sent
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+### Get user stats
+GET {{baseUrl}}/users/{{userId}}/stats
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+
+
+
+### Update user profile with image upload
+PUT {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{userToken}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="profileImage"; filename="profile.jpg"
+Content-Type: image/jpeg
+
+< /home/m_/Pictures/profile.jpg
+--boundary--
+
+### Update user profile without image
+PUT {{baseUrl}}/users/{{userId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{userToken}}
+
+{
+  "firstName": "John",
+  "lastName": "User",
+  "phone": "+2547187654321"
+}

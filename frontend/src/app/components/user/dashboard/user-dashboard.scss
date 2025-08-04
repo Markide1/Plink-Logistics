@@ -1,0 +1,47 @@
+.stat-card {
+  background-color: white;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.stat-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1e40af;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.bg-white {
+  background: white;
+}
+
+.text-blue-800 {
+  color: #1e40af;
+}
+
+.text-blue-600 {
+  color: #2563eb;
+}

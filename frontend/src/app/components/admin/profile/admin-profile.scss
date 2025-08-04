@@ -1,0 +1,36 @@
+.settings-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.input-field {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border: 1px solid #d1d5db; 
+  border-radius: 0.5rem; 
+  transition: box-shadow 0.2s;
+}
+
+.input-field:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #bfdbfe;
+}
+
+.btn-primary {
+    background-color: #2563eb;
+    color: #fff;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}

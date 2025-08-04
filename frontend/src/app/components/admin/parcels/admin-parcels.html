@@ -1,0 +1,498 @@
+<div *ngIf="showSendParcelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+  <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-8 relative">
+    <button (click)="closeSendParcelModal()"
+      class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold">&times;</button>
+    <h2 class="text-2xl font-bold text-blue-700 mb-6 text-center">Create Parcel</h2>
+    <form (ngSubmit)="sendParcel()" #createParcelForm="ngForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Receiver Email</label>
+        <input type="email" [(ngModel)]="adminParcel.receiverEmail" name="receiverEmail" required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Receiver Name</label>
+        <input type="text" [(ngModel)]="adminParcel.receiverName" name="receiverName"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Receiver Phone</label>
+        <input type="text" [(ngModel)]="adminParcel.receiverPhone" name="receiverPhone"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+        <input type="text" [(ngModel)]="adminParcel.description" name="description" required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div class="flex gap-2">
+        <div class="w-1/2">
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Weight (kg)</label>
+          <input type="number" [(ngModel)]="adminParcel.weight" name="weight" required min="0.1" step="0.1"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Pickup Location</label>
+        <input type="text" [(ngModel)]="adminParcel.pickupLocation" name="pickupLocation" required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Destination Location</label>
+        <input type="text" [(ngModel)]="adminParcel.destinationLocation" name="destinationLocation" required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <button type="submit" [disabled]="isSending"
+        class="w-full bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 shadow-md">
+        <span *ngIf="!isSending">Create Parcel</span>
+        <span *ngIf="isSending">Creating...</span>
+      </button>
+      <div *ngIf="sendError" class="mt-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md">
+        {{ sendError }}
+      </div>
+      <div *ngIf="sendSuccess" class="mt-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md">
+        Parcel created successfully!
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="bg-gray-50 min-h-screen py-8">
+  <div class="container mx-auto px-4 max-w-7xl">
+    <div class="bg-white p-8 rounded-2xl shadow-lg mb-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-blue-700">Filter Parcels</h2>
+        <button
+          *ngIf="viewMode === 'parcels'"
+          (click)="showSendParcelModal = true"
+          class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 shadow-md flex items-center gap-2"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          Send Parcel
+        </button>
+      </div>
+      <div class="flex justify-end mb-6">
+        <button (click)="setViewMode('parcels')" [class.bg-blue-600]="viewMode === 'parcels'"
+          [class.text-white]="viewMode === 'parcels'" class="px-4 py-2 rounded-l font-semibold border border-blue-600"
+          [class.bg-white]="viewMode !== 'parcels'">Parcels</button>
+        <button (click)="setViewMode('requests')" [class.bg-blue-600]="viewMode === 'requests'"
+          [class.text-white]="viewMode === 'requests'"
+          class="px-4 py-2 rounded-r font-semibold border border-blue-600 border-l-0"
+          [class.bg-white]="viewMode !== 'requests'">Parcel Requests</button>
+      </div>
+      <div *ngIf="viewMode === 'parcels'">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="flex flex-col gap-2">
+            <label class="block text-sm font-semibold text-gray-700">Search</label>
+            <div class="relative">
+              <input type="text" [(ngModel)]="filters.search" (keyup.enter)="onSearch()"
+                placeholder="Tracking number, sender, receiver..."
+                class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 placeholder-gray-400 shadow-sm" />
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="block text-sm font-semibold text-gray-700">Status</label>
+            <select [(ngModel)]="filters.status" (change)="onFilterChange()"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 shadow-sm">
+              <option *ngFor="let option of statusOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="block text-sm font-semibold text-gray-700">From Date</label>
+            <input type="date" [(ngModel)]="filters.dateFrom" (change)="onFilterChange()"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 shadow-sm" />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">To Date</label>
+            <input type="date" [(ngModel)]="filters.dateTo" (change)="onFilterChange()"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 shadow-sm" />
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-between mt-8 gap-4">
+          <div class="flex items-center gap-4">
+            <button (click)="onSearch()"
+              class="bg-blue-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-600 transition-all duration-300 shadow-md flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              Search
+            </button>
+            <button (click)="clearFilters()"
+              class="border-2 border-blue-500 text-blue-500 px-6 py-3 rounded-full font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300">
+              Clear Filters
+            </button>
+          </div>
+
+          <div *ngIf="selectedParcels().size > 0" class="flex items-center gap-4">
+            <span class="text-md text-gray-700 font-semibold">{{ selectedParcels().size }} selected</span>
+            <select #bulkStatusSelect
+              class="w-auto px-4 py-2 border border-gray-300 rounded-full focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 shadow-sm"
+              (change)="bulkUpdateStatus(bulkStatusSelect.value); bulkStatusSelect.value = ''">
+              <option value="">Bulk Actions</option>
+              <option value="PICKED_UP">Mark as Picked Up</option>
+              <option value="IN_TRANSIT">Mark as In Transit</option>
+              <option value="DELIVERED">Mark as Delivered</option>
+              <option value="CANCELLED">Mark as Cancelled</option>
+            </select>
+            <button (click)="clearSelection()"
+              class="border-2 border-blue-500 text-blue-500 px-6 py-3 rounded-full font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300">
+              Clear Selection
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="isLoading()" class="flex justify-center items-center h-64">
+          <div class="flex flex-col items-center p-12 bg-white rounded-2xl shadow-lg">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500 mb-6"></div>
+            <div class="text-blue-700 text-xl font-semibold">Loading parcels...</div>
+          </div>
+        </div>
+
+        <div *ngIf="!isLoading()" class="bg-white p-8 rounded-2xl shadow-lg mt-8">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-blue-50">
+                <tr>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider rounded-tl-lg">
+                    <input type="checkbox" (change)="onSelectAllChange($event)"
+                      class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                    Tracking Number
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                    Sender/Receiver
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                    Weight/Price
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                    Created
+                  </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider rounded-tr-lg">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr *ngFor="let parcel of parcels(); trackBy: trackByParcelId"
+                  class="hover:bg-blue-50 transition-colors">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" [checked]="selectedParcels().has(parcel.id)"
+                      (change)="toggleParcelSelection(parcel.id)"
+                      class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                  </td>
+
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ parcel.trackingNumber }}
+                    </div>
+                    <div class="text-sm text-gray-500">
+                      {{ parcel.description }}
+                    </div>
+                  </td>
+
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">
+                      <div><strong>From:</strong> {{ parcel.sender.firstName }} {{ parcel.sender.lastName }}</div>
+                      <div><strong>To:</strong> {{ parcel.receiver.firstName }} {{ parcel.receiver.lastName }}</div>
+                    </div>
+                  </td>
+
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span [class]="getStatusBadgeClass(parcel.status)">
+                      {{ getStatusText(parcel.status) }}
+                    </span>
+                  </td>
+
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <div>{{ parcel.weight }}kg</div>
+                    <div class="text-gray-500">
+                      {{ formatCurrency(parcel.price) }}
+                    </div>
+                  </td>
+
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ formatDate(parcel.createdAt) }}
+                  </td>
+
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div class="flex items-center space-x-2">
+                      <button (click)="openDetailsModal(parcel)"
+                        class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-200 transition-colors text-sm font-semibold"
+                        title="View Details">View</button>
+
+                      <button *ngIf="parcel.status === 'PENDING' && parcel.parcelRequestId" (click)="approveRequest(parcel.id)"
+                        class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full hover:bg-blue-200 transition-colors text-sm font-semibold"
+                        title="Accept Parcel">Accept</button>
+
+                      <button *ngIf="parcel.status === 'PENDING' && parcel.parcelRequestId" (click)="rejectRequest(parcel.id)"
+                        class="bg-red-100 text-red-700 px-4 py-2 rounded-full hover:bg-red-200 transition-colors text-sm font-semibold"
+                        title="Reject Parcel">Reject</button>
+
+                      <button *ngIf="parcel.status === 'PICKED_UP'" (click)="sendParcel(parcel)"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors text-sm font-semibold"
+                        title="Send Parcel">Send Parcel</button>
+
+                      <button *ngIf="parcel.status === 'IN_TRANSIT'" (click)="updateLocation(parcel)"
+                        class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-colors text-sm font-semibold"
+                        title="Update Location">Update Location</button>
+
+                      <!-- Only show Update Status button if NOT DELIVERED or RECEIVED -->
+                      <button
+                        *ngIf="parcel.status !== 'DELIVERED' && parcel.status !== 'RECEIVED'"
+                        (click)="openUpdateStatusModal(parcel)"
+                        class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full hover:bg-yellow-200 transition-colors text-sm font-semibold"
+                        title="Update Status">Update Status</button>
+
+                      <!-- Delete button for PENDING, CANCELLED, DELIVERED parcels -->
+                      <button
+                        *ngIf="parcel.status === 'PENDING' || parcel.status === 'CANCELLED' || parcel.status === 'DELIVERED'"
+                        (click)="deleteParcel(parcel.id)"
+                        class="bg-red-100 text-red-700 px-4 py-2 rounded-full hover:bg-red-200 transition-colors text-sm font-semibold"
+                        title="Delete Parcel">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div *ngIf="parcels().length === 0 && !isLoading()" class="text-center py-12">
+            <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+            </svg>
+            <p class="mt-4 text-xl text-gray-600">No parcels found for the selected filters.</p>
+          </div>
+
+          <div *ngIf="pagination().totalPages > 1" class="mt-6 flex items-center justify-between">
+            <div class="flex items-center">
+              <p class="text-sm text-gray-700">
+                Showing {{ ((pagination().page - 1) * pagination().limit) + 1 }} to
+                {{ Math.min(pagination().page * pagination().limit, pagination().total) }} of
+                {{ pagination().total }} results
+              </p>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <button (click)="previousPage()" [disabled]="pagination().page <= 1"
+                class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                Previous
+              </button>
+
+              <button *ngFor="let page of getPageNumbers()" (click)="goToPage(page)" [class]="pagination().page === page ?
+            'px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md' :
+            'px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50'">
+                {{ page }}
+              </button>
+
+              <button (click)="nextPage()" [disabled]="pagination().page >= pagination().totalPages"
+                class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showDetailsModal"
+        class="fixed inset-0 z-50 flex items-center justify-center">
+        <!-- Blurred dark background overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm pointer-events-auto"></div>
+        <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-8 relative z-10">
+          <button (click)="closeDetailsModal()"
+            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold">&times;</button>
+          <h2 class="text-2xl font-bold text-blue-700 mb-4">Parcel Details</h2>
+          <div class="space-y-2 text-gray-700" *ngIf="selectedParcel() as parcel">
+            <div><span class="font-medium">Tracking Number:</span> {{ parcel.trackingNumber }}</div>
+            <div><span class="font-medium">Status:</span> <span [class]="getStatusBadgeClass(parcel.status)">{{
+                getStatusText(parcel.status) }}</span></div>
+            <div><span class="font-medium">Description:</span> {{ parcel.description }}</div>
+            <div><span class="font-medium">Weight:</span> {{ parcel.weight }} kg</div>
+            <div><span class="font-medium">Price:</span> {{ formatCurrency(parcel.price) }}</div>
+            <div><span class="font-medium">Sender:</span> {{ parcel.sender.firstName }} {{ parcel.sender.lastName }} ({{
+              parcel.sender.email }})</div>
+            <div><span class="font-medium">Receiver:</span> {{ parcel.receiver.firstName }} {{ parcel.receiver.lastName
+              }} ({{ parcel.receiver.email }})</div>
+            <div><span class="font-medium">Pickup Location:</span> {{ parcel.pickupLocation }}</div>
+            <div><span class="font-medium">Current Location:</span> {{ parcel.currentLocation }}</div>
+            <div><span class="font-medium">Destination Location:</span> {{ parcel.destinationLocation }}</div>
+            <div><span class="font-medium">Created At:</span> {{ formatDate(parcel.createdAt) }}</div>
+            <div><span class="font-medium">Updated At:</span> {{ formatDate(parcel.updatedAt) }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showUpdateLocationModal"
+        class="fixed inset-0 z-50 flex items-center justify-center">
+        <!-- Blurred dark background overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm pointer-events-auto"></div>
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 relative z-10">
+          <button (click)="closeUpdateLocationModal()"
+            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold">&times;</button>
+          <h2 class="text-3xl font-bold text-blue-700 mb-6 text-center">Update Parcel Location</h2>
+          <form (ngSubmit)="submitLocationUpdate()" #updateLocationForm="ngForm" class="space-y-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Tracking Number</label>
+              <input type="text" [value]="updateLocationParcel.trackingNumber"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700" readonly />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">New Location</label>
+              <input type="text" [(ngModel)]="updateLocationParcel.currentLocation" name="currentLocation" required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Enter new location" />
+            </div>
+            <button type="submit" [disabled]="isUpdatingLocation"
+              class="w-full bg-blue-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-600 transition-all duration-300 shadow-md">
+              <span *ngIf="!isUpdatingLocation">Update Location</span>
+              <span *ngIf="isUpdatingLocation">Updating...</span>
+            </button>
+          </form>
+          <div *ngIf="updateLocationSuccess"
+            class="mt-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md">
+            Location updated successfully!
+          </div>
+          <div *ngIf="updateLocationError"
+            class="mt-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md">
+            {{ updateLocationError }}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showUpdateStatusModal" class="fixed inset-0 z-50 flex items-center justify-center">
+        <!-- Blurred dark background overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm pointer-events-auto"></div>
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 relative z-10">
+          <button (click)="cancelUpdateStatus()"
+            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold">&times;</button>
+          <h2 class="text-2xl font-bold text-blue-700 mb-4">Update Parcel Status</h2>
+          <div *ngIf="parcelToUpdate">
+            <div class="mb-4">
+              <div><strong>Tracking Number:</strong> {{ parcelToUpdate.trackingNumber }}</div>
+              <div><strong>Description:</strong> {{ parcelToUpdate.description }}</div>
+              <div><strong>Current Location:</strong> {{ parcelToUpdate.currentLocation || parcelToUpdate.pickupLocation }}</div>
+            </div>
+            <select [(ngModel)]="selectedStatus" class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4">
+              <option *ngFor="let status of statusOptions" [value]="status.value">{{ status.label }}</option>
+            </select>
+            <button
+              (click)="confirmUpdateStatus()"
+              [disabled]="updateStatusLoading || !selectedStatus"
+              class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 shadow-md w-full">
+              <span *ngIf="!updateStatusLoading">Update Status</span>
+              <span *ngIf="updateStatusLoading">Updating...</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <app-delete-confirmation
+        [isVisible]="showDeleteRequestModal"
+        [title]="'Delete Parcel Request'"
+        [itemName]="requestToDelete?.description"
+        [isLoading]="updateStatusLoading"
+        (confirmed)="confirmDeleteParcelRequest()"
+        (cancelled)="cancelDeleteParcelRequest()">
+      </app-delete-confirmation>
+
+      <app-delete-confirmation
+        [isVisible]="showDeleteParcelModal"
+        [title]="'Delete Parcel'"
+        [itemName]="parcelToDelete?.trackingNumber || ''"
+        [isLoading]="isDeletingParcel"
+        (confirmed)="confirmDeleteParcel()"
+        (cancelled)="cancelDeleteParcel()">
+      </app-delete-confirmation>
+    </div>
+    <div *ngIf="viewMode === 'requests'" class="mt-8">
+      <div *ngIf="isLoadingRequests()"
+        class="flex justify-center items-center h-64 bg-white rounded-2xl shadow-lg py-10">
+        <div class="flex flex-col items-center">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-4"></div>
+          <div class="text-blue-600 text-lg font-medium">Loading parcel requests...</div>
+        </div>
+      </div>
+      <div *ngIf="!isLoadingRequests()" class="bg-white p-8 rounded-2xl shadow-lg">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-blue-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">ID</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">Receiver
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">Description
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">Weight</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">Pickup</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">Destination
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let request of parcelRequests()">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ request.id }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  {{ request.receiverName }}<br>
+                  <span class="text-xs text-gray-400">{{ request.receiverEmail }}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ request.description }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ request.weight }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ request.pickupLocation }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ request.destinationLocation }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <span [ngClass]="getStatusBadgeClass(request.status)">{{ getStatusText(request.status) }}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <div class="flex gap-2">
+                    <button *ngIf="request.status === 'PENDING'" (click)="approveParcelRequest(request.id)"
+                      class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors text-xs font-semibold"
+                      title="Accept Parcel Request">Accept</button>
+                    <button *ngIf="request.status === 'PENDING'" (click)="rejectParcelRequest(request.id)"
+                      class="bg-red-100 text-red-700 px-3 py-1 rounded-full hover:bg-red-200 transition-colors text-xs font-semibold"
+                      title="Reject Parcel Request">Reject</button>
+                    <span *ngIf="request.status === 'APPROVED'" class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Approved</span>
+                    <span *ngIf="request.status === 'REJECTED'" class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">Rejected</span>
+                    <button (click)="deleteParcelRequest(request.id)"
+                      class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors text-xs font-semibold"
+                      title="Delete Parcel Request">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="parcelRequests().length === 0" class="text-center py-12">
+          <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+          </svg>
+          <p class="mt-4 text-xl text-gray-600">No parcel requests found for the selected filters.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

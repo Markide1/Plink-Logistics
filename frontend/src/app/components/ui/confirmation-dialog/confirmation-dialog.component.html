@@ -1,0 +1,19 @@
+<div *ngIf="isVisible" class="fixed inset-0 z-50 flex items-center justify-center">
+  <!-- Blurred dark background overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm pointer-events-auto"></div>
+  <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 relative">
+    <h2 class="text-xl font-bold text-blue-700 mb-4 text-center">{{ title }}</h2>
+    <p class="mb-6 text-gray-700 text-center">{{ message }}</p>
+    <div class="flex gap-4 justify-center">
+      <button (click)="onCancel()" [disabled]="isLoading"
+        class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-all duration-300">
+        {{ cancelText }}
+      </button>
+      <button (click)="onConfirm()" [disabled]="isLoading"
+        class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-all duration-300">
+        <span *ngIf="!isLoading">{{ confirmText }}</span>
+        <span *ngIf="isLoading">Processing...</span>
+      </button>
+    </div>
+  </div>
+</div>

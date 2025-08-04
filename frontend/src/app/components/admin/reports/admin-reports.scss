@@ -1,0 +1,200 @@
+.admin-reports {
+  height: 100%;
+  
+  .revenue-chart {
+    .chart-container {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      height: 200px;
+      padding: 1rem 0;
+      border-bottom: 2px solid #e5e7eb;
+      position: relative;
+    }
+    
+    .chart-bar-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      margin: 0 0.25rem;
+    }
+    
+    .chart-bar {
+      width: 40px;
+      background: linear-gradient(to top, #3b82f6, #60a5fa);
+      border-radius: 4px 4px 0 0;
+      min-height: 20px;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: linear-gradient(to top, #2563eb, #3b82f6);
+        transform: translateY(-2px);
+      }
+    }
+    
+    .chart-label {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6b7280;
+    }
+    
+    .chart-value {
+      font-size: 0.75rem;
+      color: #374151;
+      margin-top: 0.25rem;
+      font-weight: 600;
+    }
+  }
+  
+  .daily-chart {
+    .chart-grid {
+      display: flex;
+      align-items: end;
+      height: 120px;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e5e7eb;
+      gap: 2px;
+    }
+    
+    .daily-bar-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .daily-bar {
+      width: 100%;
+      max-width: 12px;
+      background: #3b82f6;
+      border-radius: 2px 2px 0 0;
+      min-height: 4px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      
+      &:hover {
+        background: #2563eb;
+        transform: scaleY(1.05);
+      }
+    }
+    
+    .chart-x-axis {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .admin-reports {
+    .chart-bar, .daily-bar {
+      background: #000 !important;
+      print-color-adjust: exact;
+    }
+    
+    .revenue-chart .chart-container,
+    .daily-chart .chart-grid {
+      border-bottom-color: #000 !important;
+    }
+  }
+  
+  // Hide interactive elements
+  button, select, input {
+    display: none !important;
+  }
+  
+  // Ensure proper page breaks
+  .card {
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+  
+  // Force chart colors for print
+  .status-pending { background-color: #fbbf24 !important; }
+  .status-picked-up { background-color: #3b82f6 !important; }
+  .status-in-transit { background-color: #6366f1 !important; }
+  .status-out-for-delivery { background-color: #8b5cf6 !important; }
+  .status-delivered { background-color: #10b981 !important; }
+  .status-cancelled { background-color: #ef4444 !important; }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .admin-reports {
+    .revenue-chart .chart-container {
+      height: 150px;
+    }
+    
+    .chart-bar {
+      width: 30px !important;
+    }
+    
+    .daily-chart .chart-grid {
+      height: 100px;
+    }
+    
+    .daily-bar {
+      max-width: 8px !important;
+    }
+  }
+}
+
+// Animation for charts
+@keyframes chartLoad {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.chart-bar, .daily-bar {
+  animation: chartLoad 0.6s ease-out;
+  transform-origin: bottom;
+}
+
+// Status color classes
+.bg-status-pending { background-color: #fbbf24; }
+.bg-status-picked-up { background-color: #3b82f6; }
+.bg-status-in-transit { background-color: #6366f1; }
+.bg-status-out-for-delivery { background-color: #8b5cf6; }
+.bg-status-delivered { background-color: #10b981; }
+.bg-status-cancelled { background-color: #ef4444; }
+
+// Loading animation for export
+.export-overlay {
+  backdrop-filter: blur(4px);
+}
+
+// Hover effects for interactive elements
+.card {
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Chart tooltips
+.chart-bar:hover::after,
+.daily-bar:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10;
+}

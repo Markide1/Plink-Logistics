@@ -1,0 +1,21 @@
+.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4);
+  z-index: 50;
+}
+.bg-white {
+  background: #fff;
+}
+.rounded-2xl {
+  border-radius: 1rem;
+}
+.shadow-xl {
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}

@@ -1,0 +1,16 @@
+.bg-white { background: white; }
+.text-blue-800 { color: #1e40af; }
+.text-blue-600 { color: #2563eb; }
+.text-blue-400 { color: #60a5fa; }
+.border-blue-600 { border-color: #2563eb; }
+.border-blue-400 { border-color: #60a5fa; }
+.border-blue-100 { border-color: #dbeafe; }
+.rounded-lg { border-radius: 0.5rem; }
+.shadow-lg { box-shadow: 0 10px 25px rgba(30, 64, 175, 0.1); }
+.p-4 { padding: 1rem; }
+.mt-1 { margin-top: 0.25rem; }
+.ml-3 { margin-left: 0.75rem; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.transition-colors { transition: color 0.2s; }
+.space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.5rem; }

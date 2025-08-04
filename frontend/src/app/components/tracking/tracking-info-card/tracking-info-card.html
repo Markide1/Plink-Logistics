@@ -1,0 +1,142 @@
+<div class="bg-white rounded-lg shadow-sm border border-blue-100 overflow-hidden">
+  <!-- Header with status -->
+  <div class="border-b border-blue-100 px-6 py-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-full bg-blue-100">
+          <app-icon [name]="getStatusIcon(trackingInfo.status)" [size]="20" customClass="text-blue-600"></app-icon>
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold text-blue-800">
+            {{ getStatusLabel(trackingInfo.status) }}
+          </h2>
+          <p class="text-sm text-blue-600">
+            Tracking #{{ trackingInfo.trackingNumber }}
+          </p>
+        </div>
+      </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-6 space-y-6">
+    <!-- Delivery Info -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-sm font-medium text-blue-800 mb-3">Delivery Information</h3>
+        <div class="space-y-2">
+          <div class="flex items-center space-x-2">
+            <app-icon name="calendar" [size]="16" customClass="text-blue-600"></app-icon>
+            <span class="text-sm text-blue-600">
+              <span class="font-medium">Estimated:</span> 
+              {{ formatDate(trackingInfo.estimatedDelivery) }}
+            </span>
+          </div>
+          <div *ngIf="trackingInfo.actualDelivery" class="flex items-center space-x-2">
+            <app-icon name="check" [size]="16" customClass="text-blue-600"></app-icon>
+            <span class="text-sm text-blue-600">
+              <span class="font-medium">Delivered:</span> 
+              {{ formatDate(trackingInfo.actualDelivery) }}
+            </span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <app-icon name="location" [size]="16" customClass="text-blue-600"></app-icon>
+            <span class="text-sm text-blue-600">
+              <span class="font-medium">Current:</span> 
+              {{ trackingInfo.currentLocation.address }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-medium text-blue-800 mb-3">Package Details</h3>
+        <div class="space-y-2">
+          <div class="flex items-center space-x-2">
+            <app-icon name="package" [size]="16" customClass="text-blue-600"></app-icon>
+            <span class="text-sm text-blue-600">
+              <span class="font-medium">Service:</span> 
+              {{ getServiceTypeLabel(trackingInfo.serviceType) }}
+            </span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <app-icon name="box" [size]="16" customClass="text-blue-600"></app-icon>
+            <span class="text-sm text-blue-600">
+              <span class="font-medium">Weight:</span> 
+              {{ trackingInfo.weight }}kg
+            </span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <app-icon name="clock" [size]="16" customClass="text-blue-600"></app-icon>
+            <span class="text-sm text-blue-600">
+              <span class="font-medium">Updated:</span> 
+              {{ formatRelativeTime(trackingInfo.lastUpdated) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address Information -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-blue-50 rounded-lg p-4">
+        <h3 class="text-sm font-medium text-blue-800 mb-3 flex items-center">
+          <app-icon name="location" [size]="16" customClass="text-blue-600 mr-2"></app-icon>
+          From
+        </h3>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-blue-800">{{ trackingInfo.sender.name }}</p>
+          <p class="text-sm text-blue-600">{{ trackingInfo.origin.address }}</p>
+          <p class="text-sm text-blue-600">
+            {{ trackingInfo.origin.city }}, {{ trackingInfo.origin.state }}
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-blue-50 rounded-lg p-4">
+        <h3 class="text-sm font-medium text-blue-800 mb-3 flex items-center">
+          <app-icon name="location" [size]="16" customClass="text-blue-600 mr-2"></app-icon>
+          To
+        </h3>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-blue-800">{{ trackingInfo.recipient.name }}</p>
+          <p class="text-sm text-blue-600">{{ trackingInfo.destination.address }}</p>
+          <p class="text-sm text-blue-600">
+            {{ trackingInfo.destination.city }}, {{ trackingInfo.destination.state }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="space-y-2">
+      <div class="flex justify-between text-sm text-blue-600">
+        <span>Progress</span>
+        <span>{{ getProgressPercentage() }}%</span>
+      </div>
+      <div class="w-full bg-blue-100 rounded-full h-2">
+        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300"
+             [style.width.%]="getProgressPercentage()"></div>
+      </div>
+      <div class="flex justify-between text-xs text-blue-600">
+        <span>Shipped</span>
+        <span>Delivered</span>
+      </div>
+    </div>
+
+    <!-- Real-time updates toggle -->
+    <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+      <div class="flex items-center space-x-2">
+        <app-icon name="refresh" [size]="16" customClass="text-blue-600"></app-icon>
+        <span class="text-sm font-medium text-blue-800">Real-time Updates</span>
+      </div>
+      <button (click)="onToggleRealTime()"
+              class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+              [class.bg-blue-600]="realTimeEnabled"
+              [class.bg-blue-100]="!realTimeEnabled">
+        <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+              [class.translate-x-5]="realTimeEnabled"
+              [class.translate-x-0]="!realTimeEnabled"></span>
+      </button>
+    </div>
+  </div>
+</div>

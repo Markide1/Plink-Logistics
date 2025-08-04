@@ -1,0 +1,57 @@
+<div class="bg-white rounded-lg shadow-sm border border-blue-100 overflow-hidden">
+  <div class="px-4 py-3 border-b border-blue-100">
+    <div class="flex items-center justify-between">
+      <h3 class="text-sm font-medium text-blue-800 flex items-center">
+        <app-icon name="clock" [size]="16" customClass="text-blue-600 mr-2"></app-icon>
+        Recent Searches
+      </h3>
+      <button *ngIf="history.length > 0" 
+              (click)="onClearHistory()"
+              class="text-xs text-blue-600 hover:text-blue-800 transition-colors">
+        Clear All
+      </button>
+    </div>
+  </div>
+  
+  <div class="max-h-64 overflow-y-auto">
+    <div *ngIf="history.length === 0" 
+         class="px-4 py-8 text-center text-blue-600">
+      <app-icon name="search" [size]="48" customClass="text-blue-100 mx-auto mb-3"></app-icon>
+      <p class="text-sm">No recent searches</p>
+      <p class="text-xs text-blue-600 mt-1">Your recent tracking searches will appear here</p>
+    </div>
+    
+    <div *ngFor="let item of history; let i = index" 
+         class="px-4 py-3 border-b border-blue-50 last:border-b-0 hover:bg-blue-50 cursor-pointer transition-colors"
+         (click)="onSelectHistory(item)">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3 flex-1 min-w-0">
+          <div class="flex-shrink-0">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100">
+              <app-icon [name]="getStatusIcon(item.status)" [size]="14" customClass="text-blue-600"></app-icon>
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center space-x-2">
+              <p class="text-sm font-medium text-blue-800 truncate">
+                {{ formatTrackingNumber(item.trackingNumber) }}
+              </p>
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                {{ getStatusLabel(item.status) }}
+              </span>
+            </div>
+            <p class="text-xs text-blue-600 mt-1">
+              {{ formatSearchTime(item.searchedAt) }}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button (click)="onRemoveItem(item, $event)"
+                  class="p-1 text-blue-600 hover:text-blue-800 transition-colors">
+            <app-icon name="x" [size]="14"></app-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

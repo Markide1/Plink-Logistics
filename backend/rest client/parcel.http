@@ -1,0 +1,78 @@
+@baseUrl = http://localhost:3000/api/v1
+@contentType = application/json
+
+@adminToken = 
+
+@userToken = 
+
+@parcelId = 
+
+### Create parcel
+POST {{baseUrl}}/parcels
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+{
+  "receiverName": "Updated User",
+  "receiverPhone": "+254787654321",
+  "receiverEmail": "kibalik855@mvpmedix.com",
+  "description": "Supply delivery",
+  "weight": 600,
+  "pickupLocation": "Chuka, Kenya",
+  "destinationLocation": "Thika, Kenya"
+}
+
+
+
+### Create parcel (admin as receiver)
+POST {{baseUrl}}/parcels
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+{
+  "receiverEmail": "markide4@gmail.com",
+  "description": "Parcel to admin",
+  "weight": 2,
+  "pickupLocation": "Nairobi",
+  "destinationLocation": "Mombasa"
+}
+
+### Get all parcels
+GET {{baseUrl}}/parcels
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+### Get all parcels (user token)
+GET {{baseUrl}}/parcels
+Content-Type: {{contentType}}
+Authorization: Bearer {{userToken}}
+
+### Get parcel by ID
+GET {{baseUrl}}/parcels/{{parcelId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+
+### Update parcel status
+PUT {{baseUrl}}/parcels/{{parcelId}}/status
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+{
+  "status": "DELIVERED"
+}
+
+### Update parcel status (user)
+PUT {{baseUrl}}/parcels/{{parcelId}}/status
+Content-Type: {{contentType}}
+Authorization: Bearer {{userToken}}
+
+{
+  "status": "RECEIVED"
+}
+
+### Delete parcel
+DELETE {{baseUrl}}/parcels/{{parcelId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+

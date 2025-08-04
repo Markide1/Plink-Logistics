@@ -1,0 +1,47 @@
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.sidebar-transition {
+  transition: width 0.3s ease-in-out;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  flex-shrink: 0;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #f9fafb;
+  padding: 1.5rem;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    z-index: 40;
+    height: 100vh;
+    transform: translateX(-100%);
+    
+    &.open {
+      transform: translateX(0);
+    }
+  }
+  
+  .main-content {
+    width: 100%;
+  }
+}

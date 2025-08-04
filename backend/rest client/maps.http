@@ -1,0 +1,32 @@
+### Variables
+@baseUrl = http://localhost:3000/api/v1
+
+### Test geocoding (converting address to coordinates)
+GET {{baseUrl}}/maps/geocode?address=Chuka, Kenya
+Content-Type: application/json
+
+###
+
+### Test geocoding for Nairobi
+GET {{baseUrl}}/maps/geocode?address=Nairobi, Kenya
+Content-Type: application/json
+
+###
+
+
+### Test reverse geocoding (converting coordinates to address)
+GET {{baseUrl}}/maps/reverse-geocode?latitude=-1.2921&longitude=36.8219
+Content-Type: application/json
+
+###
+
+
+### Test distance calculation between two cities
+GET {{baseUrl}}/maps/distance?origin=Chuka, Kenya&destination=Nairobi, Kenya
+Content-Type: application/json
+
+###
+
+
+
+

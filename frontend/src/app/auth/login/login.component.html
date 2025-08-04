@@ -1,0 +1,135 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4" *ngIf="!isLoggedIn">
+  <div class="w-full max-w-md">
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-blue-500 mb-2">Welcome Back</h1>
+        <p class="text-black">Sign in to your account</p>
+      </div>
+
+      <!-- Login Form -->
+      <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="space-y-6">
+        <!-- Email Field -->
+        <div class="space-y-2">
+          <label for="email" class="block text-sm font-medium text-blue-500">Email </label>
+          <input 
+            id="email" 
+            type="email" 
+            name="email"
+            [(ngModel)]="credentials.email"
+            required
+            email
+            #emailInput="ngModel"
+            class="w-full px-4 py-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+            [class.border-red-500]="emailInput.errors && emailInput.touched"
+            [class.focus:ring-red-500]="emailInput.errors && emailInput.touched"
+            [class.focus:border-red-500]="emailInput.errors && emailInput.touched"
+            autocomplete="email"
+          >
+          <div *ngIf="emailInput.errors?.['required'] && emailInput.touched" class="text-red-600 text-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            Email is required
+          </div>
+          <div *ngIf="emailInput.errors?.['email'] && emailInput.touched" class="text-red-600 text-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            Please enter a valid email address
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="space-y-2">
+          <label for="password" class="block text-sm font-medium text-blue-500">Password</label>
+          <div class="relative">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              id="password" 
+              name="password"
+              [(ngModel)]="credentials.password"
+              required
+              minlength="6"
+              #passwordInput="ngModel"
+              class="w-full px-4 py-3 pr-12 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-blue-700 placeholder-blue-300"
+              [class.border-red-500]="passwordInput.errors && passwordInput.touched"
+              [class.focus:ring-red-500]="passwordInput.errors && passwordInput.touched"
+              [class.focus:border-red-500]="passwordInput.errors && passwordInput.touched"
+              autocomplete="current-password"
+            >
+            <button 
+              type="button" 
+              (click)="togglePasswordVisibility()" 
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-500 hover:text-blue-700 transition-colors"
+              tabindex="-1"
+            >
+              <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.956 9.956 0 012.442-4.362m3.31-2.362A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.96 9.96 0 01-4.205 5.442M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+              </svg>
+            </button>
+          </div>
+          <div *ngIf="passwordInput.errors?.['required'] && passwordInput.touched" class="text-red-600 text-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            Password is required
+          </div>
+          <div *ngIf="passwordInput.errors?.['minlength'] && passwordInput.touched" class="text-red-600 text-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            Password must be at least 6 characters
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 rounded-lg p-3">
+          <div class="flex items-center">
+            <svg class="w-5 h-5 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-red-800 text-sm">{{ errorMessage }}</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="w-full bg-blue-500 text-white py-3 px-4 rounded-full font-medium hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <ng-container *ngIf="!isLoading">
+
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 -960 960 960" fill="#e3e3e3">
+              <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z"/>
+            </svg>
+          </ng-container>
+          {{ isLoading ? 'Signing in...' : 'Sign In' }}
+        </button>
+
+        <!-- Forgot Password Link -->
+        <div class="text-center">
+          <a routerLink="/auth/forgot-password" class="text-blue-500 hover:text-blue-800 text-sm font-medium transition-colors">Forgot your password?</a>
+        </div>
+      </form>
+
+      <!-- Register Link -->
+      <div class="mt-8 pt-6 border-t border-blue-100">
+        <p class="text-center text-sm text-black">
+          Don't have an account?
+          <a routerLink="/auth/register" class="text-blue-500 hover:text-blue-600 font-medium ml-1 transition-colors">Register here</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
